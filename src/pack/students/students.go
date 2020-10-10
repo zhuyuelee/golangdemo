@@ -1,4 +1,4 @@
-package student
+package students
 
 import "fmt"
 

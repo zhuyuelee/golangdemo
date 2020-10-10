@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"pack/student"
+	"pack/students"
 )
 
 func main() {
-	student.InitData()
+	students.InitData()
 	for {
 		fmt.Println("-----------------学生管理-----------------")
-		student.GetStudent()
+		students.GetStudent()
 		fmt.Println("-----------------------------------------")
 		fmt.Println(`-----------------管理菜单-----------------
 1、添加学生
@@ -40,7 +40,7 @@ func inputStudentNo() (no string) {
 	return
 }
 
-func inputStudent() student.Student {
+func inputStudent() students.Student {
 	var (
 		name      string
 		classRoom string
@@ -53,7 +53,7 @@ func inputStudent() student.Student {
 	print("请输入学生班级：")
 	fmt.Scanln(&classRoom)
 
-	return student.Student{
+	return students.Student{
 		Name:      name,
 		Age:       age,
 		ClassRoom: classRoom,
@@ -74,5 +74,5 @@ func editStudent() {
 
 func deleteStudent() {
 	no := inputStudentNo()
-	student.Delete(no)
+	students.Delete(no)
 }
