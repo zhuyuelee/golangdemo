@@ -2,6 +2,10 @@
 下载并安装 Go 客户端库:
 将通过 go install 实现。但是首先要验证环境变量中是否含有 `GOPATH` 变量，因为外部源码将被下载到 `$GOPATH/src` 目录下并被安装到 `$GOPATH/PKG/"machine_arch"/` 目录下。
 
+我们将通过在终端调用以下命令来下载 API:
+
+	go get google.golang.org/api/urlshortener/v1
+
 我们将通过在终端调用以下命令来安装 API:
 
 	go install google.golang.org/api/urlshortener/v1
