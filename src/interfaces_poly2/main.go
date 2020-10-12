@@ -33,9 +33,15 @@ func main() {
 	m["Rectangle"] = Rectangle{5, 3}
 	m["Square"] = Square{10}
 
-	for key, s := range m {
-		fmt.Printf("%s的面积是%f\n", key, s.Area())
+	for key, square := range m {
+		fmt.Printf("%s的面积是%0.2f\n", key, square.Area())
 
+		switch s := square.(type) {
+		case Rectangle:
+			fmt.Printf("长方形宽：%0.2f 高%0.2f\n", s.width, s.length)
+		case Square:
+			fmt.Printf("正方形宽：%0.2f\n", s.side)
+		}
 	}
 
 	// r := Rectangle{5, 3} // Area() of Rectangle needs a value
