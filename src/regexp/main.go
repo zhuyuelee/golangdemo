@@ -13,7 +13,7 @@ func main() {
 
 //提取用户多输入多个数字
 func regNum() {
-	var reg = regexp.MustCompile(`(\d+(.\d+)?)(;\d+(.\d+)?)*`)
+	var reg = regexp.MustCompile(`[0-9]+.?[0-9]+`)
 	for {
 		var input string
 		fmt.Print("请输入数字(多个数据请;分隔。E退出)：")
