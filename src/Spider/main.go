@@ -33,10 +33,14 @@ func spider(page int, task chan<- int) {
 	}
 	f, _ := os.Create(fmt.Sprintf("%d.html", page))
 	jokes := getJokeStruct(body)
-	for _, joke := range jokes {
-		f.WriteString(fmt.Sprintf("title:%s content:%s \n", joke.title, joke.content))
-
+	f.WriteString("[")
+	for index, joke := range jokes {
+		f.WriteString(fmt.Sprintf(`{"title":"%s", "content":"%s" }`, joke.title, joke.content))
+		if index+1 < len(jokes) {
+			f.WriteString(",\n")
+		}
 	}
+	f.WriteString("]")
 	defer f.Close()
 	task <- page
 }
