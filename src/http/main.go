@@ -1,33 +1,44 @@
 package main
 
 import (
+	"io"
 	"net/http"
-	"text/template"
 )
 
-func main() {
-	http.HandleFunc("/", root)
+const form = `
+	<html><body>
+		<form action="#" method="post" name="bar">
+			<input type="text" name="in" />
+			<input type="submit" value="submit"/>
+		</form>
+	</body></html>
+`
 
-	http.ListenAndServe("localhost:8080", nil)
-
+// SimpleServer handle a simple get request */
+func SimpleServer(w http.ResponseWriter, request *http.Request) {
+	io.WriteString(w, "<h1>hello, world</h1>")
 }
 
-func root(w http.ResponseWriter, r *http.Request) {
-	var rootHtmlTmpl = template.Must(template.New("rootHtml").Parse(`
-	<html><body>
-	<h1>URL SHORTENER</h1>
-	{{if .}}{{.}}<br /><br />{{end}}
-	<form action="/short" type="POST">
-	Shorten this: <input type="text" name="longUrl" />
-	<input type="submit" value="Give me the short URL" />
-	</form>
-	<br />
-	<form action="/long" type="POST">
-	Expand this: http://goo.gl/<input type="text" name="shortUrl" />
-	<input type="submit" value="Give me the long URL" />
-	</form>
-	</body></html>
-	`))
+// FormServer handle a Form request */
+func FormServer(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	switch request.Method {
+	case "GET":
+		/* display the form to the user */
+		io.WriteString(w, form)
+	case "POST":
+		/* handle the form data, note that ParseForm must
+		   be called before we can extract form data */
+		//request.ParseForm();
+		//io.WriteString(w, request.Form["in"][0])
+		io.WriteString(w, request.FormValue("in"))
+	}
+}
 
-	rootHtmlTmpl.Execute(w, nil)
+func main() {
+	http.HandleFunc("/test1", SimpleServer)
+	http.HandleFunc("/test2", FormServer)
+	if err := http.ListenAndServe(":8088", nil); err != nil {
+		panic(err)
+	}
 }

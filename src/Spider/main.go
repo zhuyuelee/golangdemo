@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
@@ -31,7 +32,7 @@ func spider(page int, task chan<- int) {
 	if err != nil {
 		fmt.Printf("%d 采集出错 err=%v\n", page, err)
 	}
-	f, _ := os.Create(fmt.Sprintf("%d.html", page))
+	f, _ := os.Create(fmt.Sprintf("%d.js", page))
 	jokes := getJokeStruct(body)
 	f.WriteString("[")
 	for index, joke := range jokes {
@@ -51,18 +52,20 @@ func httpGet(url string) (string, error) {
 		fmt.Printf("%s 采集出错 err=%v\n", url, err)
 	}
 	defer res.Body.Close()
-	var body string
-
-	buf := make([]byte, 1024*4)
-	for {
-		n, _ := res.Body.Read(buf)
-		if n == 0 {
-			break
-		}
-		body += string(buf[:n])
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		fmt.Println("ioutil.ReadAll error=", readErr)
 	}
+	// buf := make([]byte, 1024*4)
+	// for {
+	// 	n, _ := res.Body.Read(buf)
+	// 	if n == 0 {
+	// 		break
+	// 	}
+	// 	body += string(buf[:n])
+	// }
 
-	return body, err
+	return string(body), err
 }
 
 // getJoke 批量采集
